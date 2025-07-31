@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Onboarding: Assistente Virtual com IA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- EmailJS Library -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .form-section {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            display: none; /* Hide all sections by default */
+        }
+        .form-section.active {
+            display: block; /* Show only the active section */
+        }
+        .form-section legend {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1e3a8a; /* Azul escuro */
+            margin-bottom: 1.5rem;
+            padding: 0 0.5rem;
+        }
+        .form-label {
+            display: block;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px #bfdbfe;
+        }
+        .form-input.invalid, .form-textarea.invalid {
+             border-color: #ef4444;
+        }
+        .form-description {
+            font-size: 0.875rem;
+            color: #6b7282;
+            margin-top: 0.25rem;
+        }
+        .gemini-button {
+            background-color: #e0e7ff;
+            color: #3730a3;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .gemini-button:hover {
+            background-color: #c7d2fe;
+        }
+        .gemini-button.loading {
+            cursor: not-allowed;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        #notification-box {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #ef4444;
+            color: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            z-index: 50;
+            display: none;
+            max-width: 320px;
+        }
+        .schedule-entry {
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            background-color: #f9fafb;
+        }
+        .progress-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+        .progress-step {
+            text-align: center;
+            flex: 1;
+            position: relative;
+        }
+        .progress-step .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #d1d5db;
+            color: #6b7282;
+            border: 2px solid #d1d5db;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .progress-step .step-label {
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: #6b7282;
+            transition: all 0.3s ease;
+        }
+        .progress-step.active .step-circle {
+            background-color: #3b82f6;
+            border-color: #3b82f6;
+            color: white;
+        }
+        .progress-step.active .step-label {
+            color: #1e3a8a;
+            font-weight: 600;
+        }
+        .progress-step::after {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background-color: #d1d5db;
+            z-index: -1;
+        }
+        .progress-step:last-child::after {
+            display: none;
+        }
+        .progress-step.active::after {
+            background-color: #3b82f6;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 p-4 sm:p-6 md:p-8">
+
+    <div id="notification-box"></div>
+
+    <div class="max-w-4xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800">Formulário de Onboarding: Assistente Virtual</h1>
+            <p class="text-gray-600 mt-2">Preencha os campos abaixo para configurar o seu assistente de IA.</p>
+        </header>
+
+        <!-- Progress Bar -->
+        <div class="progress-bar" id="progress-bar">
+            <div class="progress-step active">
+                <div class="step-circle">1</div>
+                <div class="step-label">Identidade</div>
+            </div>
+            <div class="progress-step">
+                <div class="step-circle">2</div>
+                <div class="step-label">Contato</div>
+            </div>
+            <div class="progress-step">
+                <div class="step-circle">3</div>
+                <div class="step-label">Horários</div>
+            </div>
+             <div class="progress-step">
+                <div class="step-circle">4</div>
+                <div class="step-label">Agendamento</div>
+            </div>
+             <div class="progress-step">
+                <div class="step-circle">5</div>
+                <div class="step-label">Procedimentos</div>
+            </div>
+        </div>
+
+        <form id="ia-config-form">
+            <!-- Módulo 1: Identidade e Tom de Voz -->
+            <fieldset class="form-section active">
+                <legend>Módulo 1: Identidade e Tom de Voz</legend>
+                <div class="space-y-6">
+                    <div>
+                        <label for="assistant-name" class="form-label">Nome do Assistente Virtual</label>
+                        <div class="flex items-center space-x-2">
+                            <input type="text" id="assistant-name" name="assistant_name" class="form-input" placeholder="Ex: Bia, a assistente virtual" required>
+                            <button type="button" class="gemini-button" data-gemini-action="generate-name" title="Gerar sugestão de nome com IA">✨</button>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="intro-message" class="form-label">Mensagem de Apresentação Inicial</label>
+                         <div class="flex items-start space-x-2">
+                            <textarea id="intro-message" name="intro_message" class="form-textarea" rows="3" placeholder="Ex: Olá! Sou a Bia, assistente virtual da Clínica Saúde Plena. Como posso ajudar?" required></textarea>
+                            <button type="button" class="gemini-button" data-gemini-action="generate-intro" title="Gerar sugestão de mensagem com IA">✨</button>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="tone-of-voice" class="form-label">Tom de Voz e Linguagem</label>
+                        <select id="tone-of-voice" name="tone_of_voice" class="form-select" required>
+                            <option>Profissional e acolhedor</option>
+                            <option>Amigável e informal</option>
+                            <option>Direto e objetivo</option>
+                            <option>Extremamente formal</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="patient-treatment" class="form-label">Tratamento ao Paciente</label>
+                        <input type="text" id="patient-treatment" name="patient_treatment" class="form-input" placeholder="Ex: você, o senhor/a senhora" required>
+                    </div>
+                     <div>
+                        <label for="emoji-usage" class="form-label">Uso de Emojis</label>
+                        <input type="text" id="emoji-usage" name="emoji_usage" class="form-input" placeholder="Ex: Apenas emojis simples como 🙂 e 👍, ou todos?" required>
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- Módulo 2: Informações de Contato e Pagamento -->
+            <fieldset class="form-section">
+                <legend>Módulo 2: Contato e Pagamento</legend>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="phone-numbers" class="form-label">Telefones de Contato</label>
+                        <input type="text" id="phone-numbers" name="phone_numbers" class="form-input" placeholder="(XX) XXXX-XXXX, (XX) 9XXXX-XXXX" required>
+                    </div>
+                    <div>
+                        <label for="email" class="form-label">E-mail Geral para Contato</label>
+                        <input type="email" id="email" name="email" class="form-input" placeholder="contato@suaclinica.com" required>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label for="insurances" class="form-label">Convênios Aceitos</label>
+                        <textarea id="insurances" name="insurances" class="form-textarea" rows="3" placeholder="Liste todos os convênios e planos específicos, se houver." required></textarea>
+                    </div>
+                     <div class="md:col-span-2">
+                        <label for="payment-methods" class="form-label">Formas de Pagamento (Particulares)</label>
+                        <input type="text" id="payment-methods" name="payment_methods" class="form-input" placeholder="Dinheiro, Pix, Cartão de Crédito/Débito, etc." required>
+                    </div>
+                </div>
+            </fieldset>
+            
+            <!-- Módulo: Corpo Clínico e Horários -->
+            <fieldset class="form-section">
+                <legend>Módulo 3: Corpo Clínico e Horários</legend>
+                <div class="space-y-6">
+                    <div class="md:col-span-2">
+                        <label for="doctors" class="form-label">Corpo Clínico (Nomes)</label>
+                        <textarea id="doctors" name="doctors" class="form-textarea" rows="3" placeholder="Liste aqui apenas os nomes dos profissionais: Dr. João Silva, Dra. Ana Paula..." required></textarea>
+                        <p class="form-description">Use a seção abaixo para detalhar os horários de cada um.</p>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="form-label">Horários dos Profissionais</label>
+                        <div id="schedules-container">
+                        </div>
+                        <button type="button" id="add-schedule-btn" class="mt-4 bg-indigo-100 text-indigo-700 font-semibold py-2 px-4 rounded-lg hover:bg-indigo-200 transition-colors">
+                            + Adicionar Horário de Profissional
+                        </button>
+                         <p class="form-description">Adicione pelo menos um horário.</p>
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- Módulo 3: Agendamento, Confirmação e Cancelamento -->
+            <fieldset class="form-section">
+                <legend>Módulo 4: Agendamento e Cancelamento</legend>
+                 <div class="space-y-6">
+                    <div>
+                        <label for="new-patient-data" class="form-label">Dados para Cadastro de Novos Pacientes</label>
+                        <input type="text" id="new-patient-data" name="new_patient_data" class="form-input" placeholder="Nome completo, CPF, Data de Nascimento..." required>
+                    </div>
+                    <div>
+                        <label for="existing-patient-id" class="form-label">Identificação de Pacientes Já Cadastrados</label>
+                        <input type="text" id="existing-patient-id" name="existing_patient_id" class="form-input" placeholder="Pelo CPF, Nome completo + Data de Nascimento..." required>
+                    </div>
+                    <div>
+                        <label for="appointment-duration" class="form-label">Duração Média da Consulta</label>
+                        <input type="text" id="appointment-duration" name="appointment_duration" class="form-input" placeholder="Ex: 1ª consulta: 60 min, Retorno: 30 min" required>
+                    </div>
+                    <div>
+                        <label for="schedule-check-method" class="form-label">Método de Verificação de Agenda</label>
+                        <select id="schedule-check-method" name="schedule_check_method" class="form-select" required>
+                            <option value="api">Integrado diretamente com a agenda (via API)</option>
+                            <option value="human">Coletar preferências para um humano finalizar</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="cancellation-policy" class="form-label">Política de Cancelamento</label>
+                        <textarea id="cancellation-policy" name="cancellation_policy" class="form-textarea" rows="2" placeholder="Ex: Avisar com no mínimo 24h de antecedência." required></textarea>
+                    </div>
+                </div>
+            </fieldset>
+            
+            <!-- Módulo 4: Dúvidas sobre Procedimentos e Preços -->
+            <fieldset class="form-section">
+                <legend>Módulo 5: Dúvidas sobre Procedimentos</legend>
+                 <div class="space-y-6">
+                    <div>
+                        <label for="common-procedures" class="form-label">Todos os Procedimentos</label>
+                        <div class="flex items-start space-x-2">
+                            <textarea id="common-procedures" name="common_procedures" class="form-textarea" rows="4" placeholder="Clareamento, Limpeza, Aparelho Ortodôntico..." required></textarea>
+                            <button type="button" class="gemini-button" data-gemini-action="generate-procedures-desc" title="Gerar descrição para os procedimentos listados com IA">✨</button>
+                        </div>
+                         <p class="form-description">
+                            1. Liste os procedimentos, um por linha. <br>
+                            2. <strong>Clique no botão mágico ✨ ao lado</strong> para que a IA gere as descrições abaixo.
+                         </p>
+                    </div>
+                    <div>
+                        <label for="procedures-description" class="form-label">Descrição dos Procedimentos (Gerado pela IA)</label>
+                        <textarea id="procedures-description" name="procedures_description" class="form-textarea" rows="6" placeholder="As descrições geradas pela IA aparecerão aqui. Você pode editá-las depois." required></textarea>
+                    </div>
+                    <div>
+                        <label for="price-policy" class="form-label">Política de Informação de Preços</label>
+                        <select id="price-policy" name="price_policy" class="form-select" required>
+                            <option value="whatsapp">Informar faixas de preço pelo WhatsApp</option>
+                            <option value="in-person">Apenas pessoalmente em uma avaliação</option>
+                            <option value="no-info">Não informar preços pelo WhatsApp</option>
+                        </select>
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- Navigation Buttons -->
+            <div class="flex justify-between mt-8">
+                <button type="button" id="prev-btn" class="bg-gray-200 text-gray-700 font-bold py-2 px-6 rounded-lg hover:bg-gray-300 transition-colors">
+                    Anterior
+                </button>
+                <button type="button" id="next-btn" class="bg-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700 transition-colors">
+                    Próximo
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const apiKey = ""; // A chave da API do Gemini será injetada aqui em tempo de execução.
+        
+        // Chaves do EmailJS integradas
+        const EMAILJS_SERVICE_ID = 'service_371n5nf';
+        const EMAILJS_TEMPLATE_ID = 'template_bdbr4o5';
+        const EMAILJS_PUBLIC_KEY = '3kX8KhH13WgqQxWMK';
+
+
+        const form = document.getElementById('ia-config-form');
+        const notificationBox = document.getElementById('notification-box');
+        const schedulesContainer = document.getElementById('schedules-container');
+        const addScheduleBtn = document.getElementById('add-schedule-btn');
+        let scheduleIndex = 0;
+
+        // --- Multi-step Form Logic ---
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const formSteps = [...form.querySelectorAll('.form-section')];
+        const progressSteps = [...document.querySelectorAll('.progress-step')];
+        let currentStep = 0;
+
+        function updateFormSteps() {
+            formSteps.forEach(step => step.classList.remove('active'));
+            formSteps[currentStep].classList.add('active');
+
+            progressSteps.forEach((step, index) => {
+                if (index < currentStep) {
+                    step.classList.add('active');
+                } else if (index === currentStep) {
+                    step.classList.add('active');
+                } else {
+                    step.classList.remove('active');
+                }
+            });
+
+            prevBtn.style.display = currentStep === 0 ? 'none' : 'inline-block';
+            nextBtn.textContent = currentStep === formSteps.length - 1 ? 'Salvar e Enviar' : 'Próximo';
+        }
+
+        function validateStep(stepIndex) {
+            let isValid = true;
+            const currentStepElement = formSteps[stepIndex];
+            const fields = currentStepElement.querySelectorAll('input[required], textarea[required], select[required]');
+
+            fields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.classList.add('invalid');
+                    isValid = false;
+                } else {
+                    field.classList.remove('invalid');
+                }
+            });
+            
+            if (stepIndex === 2) { // Horários
+                const scheduleEntries = schedulesContainer.querySelectorAll('.schedule-entry');
+                if (scheduleEntries.length === 0) {
+                    isValid = false; 
+                }
+                scheduleEntries.forEach(entry => {
+                    const inputs = entry.querySelectorAll('input, textarea');
+                    inputs.forEach(input => {
+                        if (!input.value.trim()) {
+                            input.classList.add('invalid');
+                            isValid = false;
+                        } else {
+                            input.classList.remove('invalid');
+                        }
+                    });
+                });
+            }
+
+            return isValid;
+        }
+
+
+        nextBtn.addEventListener('click', () => {
+            if (validateStep(currentStep)) {
+                if (currentStep < formSteps.length - 1) {
+                    currentStep++;
+                    updateFormSteps();
+                } else {
+                    form.dispatchEvent(new Event('submit', { cancelable: true }));
+                }
+            } else {
+                 showNotification('Por favor, preencha todos os campos destacados em vermelho.');
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentStep > 0) {
+                currentStep--;
+                updateFormSteps();
+            }
+        });
+
+        updateFormSteps();
+
+
+        // --- Funções da API Gemini ---
+        async function callGemini(prompt, button) {
+            button.classList.add('loading');
+            button.disabled = true;
+            
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+            const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
+
+            try {
+                let response; let retries = 3; let delay = 1000;
+                for (let i = 0; i < retries; i++) {
+                    response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                    if (response.ok) break;
+                    if (response.status === 429 || response.status >= 500) { await new Promise(resolve => setTimeout(resolve, delay)); delay *= 2; } else { break; }
+                }
+                if (!response.ok) throw new Error(`Erro na API: ${response.statusText}`);
+                const result = await response.json();
+                if (result.candidates && result.candidates[0]?.content?.parts?.[0]?.text) { return result.candidates[0].content.parts[0].text.trim(); }
+                else { let e = "A resposta da IA veio vazia ou em formato inesperado."; if (result.promptFeedback?.blockReason) { e = `Sua solicitação foi bloqueada. Motivo: ${result.promptFeedback.blockReason}`; } throw new Error(e); }
+            } catch (error) {
+                console.error('Erro ao chamar a API Gemini:', error);
+                showNotification(`Erro ao gerar sugestão: ${error.message}`);
+                return null;
+            } finally {
+                button.classList.remove('loading');
+                button.disabled = false;
+            }
+        }
+
+        function showNotification(message, isSuccess = false) {
+            notificationBox.textContent = message;
+            notificationBox.style.backgroundColor = isSuccess ? '#10b981' : '#ef4444';
+            notificationBox.style.display = 'block';
+            setTimeout(() => {
+                notificationBox.style.display = 'none';
+            }, 5000);
+        }
+
+        // --- Lógica de Horários Dinâmicos ---
+        function addScheduleEntry() {
+            scheduleIndex++;
+            const entryDiv = document.createElement('div');
+            entryDiv.className = 'schedule-entry grid grid-cols-1 md:grid-cols-3 gap-4 items-end';
+            entryDiv.innerHTML = `
+                <div class="md:col-span-1">
+                    <label for="doc-name-${scheduleIndex}" class="form-label text-sm">Nome do Profissional</label>
+                    <input type="text" id="doc-name-${scheduleIndex}" name="doctor_schedule[${scheduleIndex}][name]" class="form-input" placeholder="Dr. João Silva" required>
+                </div>
+                <div class="md:col-span-2">
+                    <label for="doc-hours-${scheduleIndex}" class="form-label text-sm">Dias e Horários de Atendimento</label>
+                    <textarea id="doc-hours-${scheduleIndex}" name="doctor_schedule[${scheduleIndex}][hours]" class="form-textarea" rows="2" placeholder="Ex: Segunda e Quarta: 08:00 - 12:00" required></textarea>
+                </div>
+                <button type="button" class="remove-schedule-btn bg-red-100 text-red-700 text-sm font-semibold py-1 px-3 rounded-lg hover:bg-red-200 transition-colors md:col-start-3 justify-self-end">Remover</button>
+            `;
+            schedulesContainer.appendChild(entryDiv);
+            entryDiv.querySelector('.remove-schedule-btn').addEventListener('click', () => {
+                entryDiv.remove();
+            });
+        }
+        addScheduleBtn.addEventListener('click', addScheduleEntry);
+
+
+        // --- Event Listeners para os botões Gemini ---
+        document.querySelectorAll('.gemini-button').forEach(button => {
+            button.addEventListener('click', async (e) => {
+                const action = e.currentTarget.dataset.geminiAction;
+                let prompt = '';
+                let targetElementId = '';
+
+                switch (action) {
+                    case 'generate-name':
+                        prompt = `Sugira um nome criativo e profissional para um assistente virtual de uma clínica de saúde. O nome deve ser curto, amigável e de fácil pronúncia em português. Retorne apenas o nome sugerido, sem frases introdutórias.`;
+                        targetElementId = 'assistant-name';
+                        break;
+                    case 'generate-intro':
+                        const assistantName = document.getElementById('assistant-name').value || 'nossa assistente virtual';
+                        const tone = document.getElementById('tone-of-voice').value;
+                        prompt = `Crie uma mensagem de apresentação para um chatbot de clínica. O nome do assistente é "${assistantName}". O tom da mensagem deve ser "${tone}". A mensagem deve ser curta e acolhedora. Retorne apenas a mensagem, sem aspas ou frases introdutórias.`;
+                        targetElementId = 'intro-message';
+                        break;
+                    case 'generate-procedures-desc':
+                        const procedures = document.getElementById('common-procedures').value.trim();
+                        if (!procedures) { showNotification('Por favor, liste pelo menos um procedimento.'); return; }
+                        prompt = `Para cada um dos seguintes procedimentos de uma clínica, crie uma descrição curta (1-2 frases), simples e focada nos benefícios para um paciente leigo. Formate a resposta com o nome do procedimento em negrito (usando asteriscos, ex: *Clareamento Dental*) seguido pela descrição. Procedimentos:\n${procedures}`;
+                        targetElementId = 'procedures-description';
+                        break;
+                }
+
+                if (prompt && targetElementId) {
+                    const suggestion = await callGemini(prompt, e.currentTarget);
+                    if (suggestion) { document.getElementById(targetElementId).value = suggestion.replace(/^["*]+|["*]+$/g, ''); }
+                }
+            });
+        });
+        
+        form.addEventListener('input', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
+                if(e.target.value.trim() !== '') { e.target.classList.remove('invalid'); }
+            }
+        });
+
+        // --- Lógica do Formulário Principal ---
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            let allValid = true;
+            for(let i = 0; i < formSteps.length; i++){
+                if(!validateStep(i)){
+                    allValid = false;
+                    currentStep = i;
+                    updateFormSteps();
+                    showNotification('Por favor, preencha todos os campos destacados em vermelho.');
+                    break;
+                }
+            }
+            
+            if(allValid) {
+                const config = {};
+                const formData = new FormData(form);
+
+                for (const [key, value] of formData.entries()) {
+                    if (!key.startsWith('doctor_schedule')) {
+                        config[key] = value;
+                    }
+                }
+
+                config.horarios_profissionais = [];
+                const scheduleEntries = schedulesContainer.querySelectorAll('.schedule-entry');
+                scheduleEntries.forEach((entry) => {
+                    const nameInput = entry.querySelector(`input[name*="[name]"]`);
+                    const hoursInput = entry.querySelector(`textarea[name*="[hours]"]`);
+                    if (nameInput && hoursInput) {
+                        config.horarios_profissionais.push({ nome: nameInput.value, horarios: hoursInput.value });
+                    }
+                });
+                
+                const jsonString = JSON.stringify(config, null, 2);
+                
+                // Send email
+                const templateParams = { dados_json: jsonString };
+                nextBtn.textContent = 'Enviando...';
+                nextBtn.disabled = true;
+
+                emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams, EMAILJS_PUBLIC_KEY)
+                    .then((response) => {
+                       showNotification('Respostas enviadas por e-mail com sucesso!', true);
+                       nextBtn.textContent = 'Enviado!';
+                    }, (error) => {
+                       showNotification(`Erro ao enviar e-mail: ${error.text}. Baixando arquivo como backup.`);
+                       console.error('EMAILJS ERROR:', error);
+                       // Fallback to download file
+                       const blob = new Blob([jsonString], { type: 'application/json' });
+                       const downloadLink = document.createElement('a');
+                       downloadLink.href = URL.createObjectURL(blob);
+                       downloadLink.download = 'configuracao_assistente.json';
+                       document.body.appendChild(downloadLink);
+                       downloadLink.click();
+                       document.body.removeChild(downloadLink);
+                       nextBtn.textContent = 'Salvar e Enviar';
+                       nextBtn.disabled = false;
+                    });
+            }
+        });
+    </script>
+
+</body>
+</html>

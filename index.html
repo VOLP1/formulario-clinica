@@ -348,7 +348,7 @@
     </div>
 
     <script>
-        const apiKey = ""; // A chave da API do Gemini será injetada aqui em tempo de execução.
+        const apiKey = "AIzaSyDQ5nVhOKVo61_UojMdbnxZtAogJpWtzLQ"; // Chave da API do Gemini integrada.
         
         // Chaves do EmailJS integradas
         const EMAILJS_SERVICE_ID = 'service_371n5nf';
@@ -448,6 +448,11 @@
 
         // --- Funções da API Gemini ---
         async function callGemini(prompt, button) {
+            if (!apiKey) {
+                showNotification("A chave da API do Gemini não foi configurada. A geração de sugestões está desativada.");
+                return null;
+            }
+
             button.classList.add('loading');
             button.disabled = true;
             
@@ -461,10 +466,23 @@
                     if (response.ok) break;
                     if (response.status === 429 || response.status >= 500) { await new Promise(resolve => setTimeout(resolve, delay)); delay *= 2; } else { break; }
                 }
-                if (!response.ok) throw new Error(`Erro na API: ${response.statusText}`);
+                
+                if (!response.ok) {
+                    const errorBody = await response.json().catch(() => ({ error: { message: response.statusText } }));
+                    const details = errorBody?.error?.message || `Erro desconhecido (${response.status})`;
+                    throw new Error(`Erro na API: ${details}`);
+                }
+                
                 const result = await response.json();
-                if (result.candidates && result.candidates[0]?.content?.parts?.[0]?.text) { return result.candidates[0].content.parts[0].text.trim(); }
-                else { let e = "A resposta da IA veio vazia ou em formato inesperado."; if (result.promptFeedback?.blockReason) { e = `Sua solicitação foi bloqueada. Motivo: ${result.promptFeedback.blockReason}`; } throw new Error(e); }
+                if (result.candidates && result.candidates[0]?.content?.parts?.[0]?.text) {
+                    return result.candidates[0].content.parts[0].text.trim();
+                } else {
+                    let e = "A resposta da IA veio vazia ou em formato inesperado.";
+                    if (result.promptFeedback?.blockReason) {
+                        e = `Sua solicitação foi bloqueada. Motivo: ${result.promptFeedback.blockReason}`;
+                    }
+                    throw new Error(e);
+                }
             } catch (error) {
                 console.error('Erro ao chamar a API Gemini:', error);
                 showNotification(`Erro ao gerar sugestão: ${error.message}`);

@@ -220,35 +220,27 @@
                             <option>Extremamente formal</option>
                         </select>
                     </div>
-                    <div>
-                        <label for="patient-treatment" class="form-label">Tratamento ao Paciente</label>
-                        <input type="text" id="patient-treatment" name="patient_treatment" class="form-input" placeholder="Ex: você, o senhor/a senhora" required>
-                    </div>
-                     <div>
-                        <label for="emoji-usage" class="form-label">Uso de Emojis</label>
-                        <input type="text" id="emoji-usage" name="emoji_usage" class="form-input" placeholder="Ex: Apenas emojis simples como 🙂 e 👍, ou todos?" required>
-                    </div>
                 </div>
             </fieldset>
 
             <!-- Módulo 2: Informações de Contato e Pagamento -->
             <fieldset class="form-section">
-                <legend>Módulo 2: Contato e Pagamento</legend>
+                <legend>Módulo 2: Contato e pagamento</legend>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label for="phone-numbers" class="form-label">Telefones de Contato</label>
+                        <label for="phone-numbers" class="form-label">Telefones de contato</label>
                         <input type="text" id="phone-numbers" name="phone_numbers" class="form-input" placeholder="(XX) XXXX-XXXX, (XX) 9XXXX-XXXX" required>
                     </div>
                     <div>
-                        <label for="email" class="form-label">E-mail Geral para Contato</label>
+                        <label for="email" class="form-label">E-mail geral para contato</label>
                         <input type="email" id="email" name="email" class="form-input" placeholder="contato@suaclinica.com" required>
                     </div>
                     <div class="md:col-span-2">
-                        <label for="insurances" class="form-label">Convênios Aceitos</label>
+                        <label for="insurances" class="form-label">Convênios aceitos</label>
                         <textarea id="insurances" name="insurances" class="form-textarea" rows="3" placeholder="Liste todos os convênios e planos específicos, se houver." required></textarea>
                     </div>
                      <div class="md:col-span-2">
-                        <label for="payment-methods" class="form-label">Formas de Pagamento (Particulares)</label>
+                        <label for="payment-methods" class="form-label">Formas de pagamento (particulares)</label>
                         <input type="text" id="payment-methods" name="payment_methods" class="form-input" placeholder="Dinheiro, Pix, Cartão de Crédito/Débito, etc." required>
                     </div>
                 </div>
@@ -264,7 +256,7 @@
                         <p class="form-description">Use a seção abaixo para detalhar os horários de cada um.</p>
                     </div>
                     <div class="md:col-span-2">
-                        <label class="form-label">Horários dos Profissionais</label>
+                        <label class="form-label">Horários dos profissionais</label>
                         <div id="schedules-container">
                         </div>
                         <button type="button" id="add-schedule-btn" class="mt-4 bg-indigo-100 text-indigo-700 font-semibold py-2 px-4 rounded-lg hover:bg-indigo-200 transition-colors">
@@ -280,15 +272,15 @@
                 <legend>Módulo 4: Agendamento e Cancelamento</legend>
                  <div class="space-y-6">
                     <div>
-                        <label for="new-patient-data" class="form-label">Dados para Cadastro de Novos Pacientes</label>
+                        <label for="new-patient-data" class="form-label">Dados nescessários para cadastro de novos pacientes</label>
                         <input type="text" id="new-patient-data" name="new_patient_data" class="form-input" placeholder="Nome completo, CPF, Data de Nascimento..." required>
                     </div>
                     <div>
-                        <label for="existing-patient-id" class="form-label">Identificação de Pacientes Já Cadastrados</label>
+                        <label for="existing-patient-id" class="form-label">Como pacientes já cadastrados são indentificados?</label>
                         <input type="text" id="existing-patient-id" name="existing_patient_id" class="form-input" placeholder="Pelo CPF, Nome completo + Data de Nascimento..." required>
                     </div>
                     <div>
-                        <label for="appointment-duration" class="form-label">Duração Média da Consulta</label>
+                        <label for="appointment-duration" class="form-label">Duração média de uma consulta</label>
                         <input type="text" id="appointment-duration" name="appointment_duration" class="form-input" placeholder="Ex: 1ª consulta: 60 min, Retorno: 30 min" required>
                     </div>
                     <div>
@@ -299,7 +291,7 @@
                         </select>
                     </div>
                     <div>
-                        <label for="cancellation-policy" class="form-label">Política de Cancelamento</label>
+                        <label for="cancellation-policy" class="form-label">Quais as política de Cancelamento?</label>
                         <textarea id="cancellation-policy" name="cancellation_policy" class="form-textarea" rows="2" placeholder="Ex: Avisar com no mínimo 24h de antecedência." required></textarea>
                     </div>
                 </div>

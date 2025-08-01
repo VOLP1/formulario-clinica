@@ -8,7 +8,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- EmailJS Library -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <style>
         body {
@@ -168,7 +167,6 @@
             <p class="text-gray-600 mt-2">Preencha os campos abaixo para configurar o seu assistente de IA.</p>
         </header>
 
-        <!-- Progress Bar -->
         <div class="progress-bar" id="progress-bar">
             <div class="progress-step active">
                 <div class="step-circle">1</div>
@@ -193,7 +191,6 @@
         </div>
 
         <form id="ia-config-form">
-            <!-- Módulo 1: Identidade e Tom de Voz -->
             <fieldset class="form-section active">
                 <legend>Módulo 1: Identidade e Tom de Voz</legend>
                 <div class="space-y-6">
@@ -223,7 +220,6 @@
                 </div>
             </fieldset>
 
-            <!-- Módulo 2: Informações de Contato e Pagamento -->
             <fieldset class="form-section">
                 <legend>Módulo 2: Contato e pagamento</legend>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -246,7 +242,6 @@
                 </div>
             </fieldset>
             
-            <!-- Módulo: Corpo Clínico e Horários -->
             <fieldset class="form-section">
                 <legend>Módulo 3: Corpo Clínico e Horários</legend>
                 <div class="space-y-6">
@@ -267,7 +262,6 @@
                 </div>
             </fieldset>
 
-            <!-- Módulo 3: Agendamento, Confirmação e Cancelamento -->
             <fieldset class="form-section">
                 <legend>Módulo 4: Agendamento e Cancelamento</legend>
                  <div class="space-y-6">
@@ -297,7 +291,6 @@
                 </div>
             </fieldset>
             
-            <!-- Módulo 4: Dúvidas sobre Procedimentos e Preços -->
             <fieldset class="form-section">
                 <legend>Módulo 5: Dúvidas sobre Procedimentos</legend>
                  <div class="space-y-6">
@@ -327,7 +320,6 @@
                 </div>
             </fieldset>
 
-            <!-- Navigation Buttons -->
             <div class="flex justify-between mt-8">
                 <button type="button" id="prev-btn" class="bg-gray-200 text-gray-700 font-bold py-2 px-6 rounded-lg hover:bg-gray-300 transition-colors">
                     Anterior
@@ -337,323 +329,324 @@
                 </button>
             </div>
         </form>
-
-
+    </div> <div id="thank-you-page" class="max-w-2xl mx-auto text-center bg-white p-8 sm:p-12 rounded-lg shadow-lg hidden">
+        <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100">
+            <svg class="h-10 w-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+        </div>
+        <h2 class="mt-6 text-3xl font-bold text-gray-800">Obrigado!</h2>
+        <p class="mt-4 text-gray-600">Suas informações foram recebidas com sucesso. Em breve, sua assistente virtual estará configurada com base nos dados que você forneceu.</p>
+        <p class="mt-2 text-sm text-gray-500">Uma cópia das suas respostas foi enviada para o seu e-mail de configuração.</p>
+        <div class="mt-8">
+            <button id="download-backup-btn" class="bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-indigo-700 transition-colors">
+                Baixar Backup das Respostas (JSON)
+            </button>
+        </div>
     </div>
 
-            <div id="thank-you-page" class="max-w-2xl mx-auto text-center bg-white p-8 sm:p-12 rounded-lg shadow-lg hidden">
-    <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100">
-        <svg class="h-10 w-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-        </svg>
-    </div>
-    <h2 class="mt-6 text-3xl font-bold text-gray-800">Obrigado!</h2>
-    <p class="mt-4 text-gray-600">Suas informações foram recebidas com sucesso. Em breve, sua assistente virtual estará configurada com base nos dados que você forneceu.</p>
-    <p class="mt-2 text-sm text-gray-500">Uma cópia das suas respostas foi enviada para o seu e-mail de configuração.</p>
-    <div class="mt-8">
-        <button id="download-backup-btn" class="bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-indigo-700 transition-colors">
-            Baixar Backup das Respostas (JSON)
-        </button>
-    </div>
-</div>
 
-<script>
-    const apiKey = "AIzaSyDQ5nVhOKVo61_UojMdbnxZtAogJpWtzLQ"; // Chave da API do Gemini integrada.
-    
-    // Chaves do EmailJS integradas
-    const EMAILJS_SERVICE_ID = 'service_371n5nf';
-    const EMAILJS_TEMPLATE_ID = 'template_jq4nt66';
-    const EMAILJS_PUBLIC_KEY = '3kX8KhH13WgqQxWMK';
+    <script>
+        const apiKey = "AIzaSyDQ5nVhOKVo61_UojMdbnxZtAogJpWtzLQ"; // Chave da API do Gemini integrada.
+        
+        // Chaves do EmailJS integradas
+        const EMAILJS_SERVICE_ID = 'service_371n5nf';
+        const EMAILJS_TEMPLATE_ID = 'template_jq4nt66';
+        const EMAILJS_PUBLIC_KEY = '3kX8KhH13WgqQxWMK';
 
 
-    const form = document.getElementById('ia-config-form');
-    const notificationBox = document.getElementById('notification-box');
-    const schedulesContainer = document.getElementById('schedules-container');
-    const addScheduleBtn = document.getElementById('add-schedule-btn');
-    let scheduleIndex = 0;
+        const form = document.getElementById('ia-config-form');
+        const notificationBox = document.getElementById('notification-box');
+        const schedulesContainer = document.getElementById('schedules-container');
+        const addScheduleBtn = document.getElementById('add-schedule-btn');
+        let scheduleIndex = 0;
 
-    // --- NOVO: Referências aos contêineres principais ---
-    const formContainer = document.querySelector('.max-w-4xl.mx-auto');
-    const thankYouPage = document.getElementById('thank-you-page');
-    
-    // --- Multi-step Form Logic ---
-    const prevBtn = document.getElementById('prev-btn');
-    const nextBtn = document.getElementById('next-btn');
-    const formSteps = [...form.querySelectorAll('.form-section')];
-    const progressSteps = [...document.querySelectorAll('.progress-step')];
-    let currentStep = 0;
+        // Referências aos contêineres principais
+        const formContainer = document.querySelector('.max-w-4xl.mx-auto');
+        const thankYouPage = document.getElementById('thank-you-page');
+        
+        // --- Multi-step Form Logic ---
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const formSteps = [...form.querySelectorAll('.form-section')];
+        const progressSteps = [...document.querySelectorAll('.progress-step')];
+        let currentStep = 0;
 
-    function updateFormSteps() {
-        formSteps.forEach(step => step.classList.remove('active'));
-        formSteps[currentStep].classList.add('active');
+        function updateFormSteps() {
+            formSteps.forEach(step => step.classList.remove('active'));
+            formSteps[currentStep].classList.add('active');
 
-        progressSteps.forEach((step, index) => {
-            if (index < currentStep) {
-                step.classList.add('active');
-            } else if (index === currentStep) {
-                step.classList.add('active');
+            progressSteps.forEach((step, index) => {
+                if (index < currentStep) {
+                    step.classList.add('active');
+                } else if (index === currentStep) {
+                    step.classList.add('active');
+                } else {
+                    step.classList.remove('active');
+                }
+            });
+
+            prevBtn.style.display = currentStep === 0 ? 'none' : 'inline-block';
+            nextBtn.textContent = currentStep === formSteps.length - 1 ? 'Salvar e Enviar' : 'Próximo';
+        }
+
+        function validateStep(stepIndex) {
+            let isValid = true;
+            const currentStepElement = formSteps[stepIndex];
+            const fields = currentStepElement.querySelectorAll('input[required], textarea[required], select[required]');
+
+            fields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.classList.add('invalid');
+                    isValid = false;
+                } else {
+                    field.classList.remove('invalid');
+                }
+            });
+            
+            if (stepIndex === 2) { // Horários
+                const scheduleEntries = schedulesContainer.querySelectorAll('.schedule-entry');
+                if (scheduleEntries.length === 0) {
+                    addScheduleBtn.classList.add('invalid'); // Destaque visual no botão
+                    isValid = false; 
+                } else {
+                    addScheduleBtn.classList.remove('invalid');
+                }
+                scheduleEntries.forEach(entry => {
+                    const inputs = entry.querySelectorAll('input, textarea');
+                    inputs.forEach(input => {
+                        if (!input.value.trim()) {
+                            input.classList.add('invalid');
+                            isValid = false;
+                        } else {
+                            input.classList.remove('invalid');
+                        }
+                    });
+                });
+            }
+
+            return isValid;
+        }
+
+
+        nextBtn.addEventListener('click', () => {
+            if (validateStep(currentStep)) {
+                if (currentStep < formSteps.length - 1) {
+                    currentStep++;
+                    updateFormSteps();
+                } else {
+                    form.dispatchEvent(new Event('submit', { cancelable: true }));
+                }
             } else {
-                step.classList.remove('active');
+                    showNotification('Por favor, preencha todos os campos destacados em vermelho.');
             }
         });
 
-        prevBtn.style.display = currentStep === 0 ? 'none' : 'inline-block';
-        nextBtn.textContent = currentStep === formSteps.length - 1 ? 'Salvar e Enviar' : 'Próximo';
-    }
-
-    function validateStep(stepIndex) {
-        let isValid = true;
-        const currentStepElement = formSteps[stepIndex];
-        const fields = currentStepElement.querySelectorAll('input[required], textarea[required], select[required]');
-
-        fields.forEach(field => {
-            if (!field.value.trim()) {
-                field.classList.add('invalid');
-                isValid = false;
-            } else {
-                field.classList.remove('invalid');
+        prevBtn.addEventListener('click', () => {
+            if (currentStep > 0) {
+                currentStep--;
+                updateFormSteps();
             }
+        });
+
+        updateFormSteps();
+
+
+        // --- Funções da API Gemini ---
+        async function callGemini(prompt, button) {
+            if (!apiKey) {
+                showNotification("A chave da API do Gemini não foi configurada. A geração de sugestões está desativada.");
+                return null;
+            }
+
+            button.classList.add('loading');
+            button.disabled = true;
+            
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+            const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
+
+            try {
+                let response; let retries = 3; let delay = 1000;
+                for (let i = 0; i < retries; i++) {
+                    response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                    if (response.ok) break;
+                    if (response.status === 429 || response.status >= 500) { await new Promise(resolve => setTimeout(resolve, delay)); delay *= 2; } else { break; }
+                }
+                
+                if (!response.ok) {
+                    const errorBody = await response.json().catch(() => ({ error: { message: response.statusText } }));
+                    const details = errorBody?.error?.message || `Erro desconhecido (${response.status})`;
+                    throw new Error(`Erro na API: ${details}`);
+                }
+                
+                const result = await response.json();
+                if (result.candidates && result.candidates[0]?.content?.parts?.[0]?.text) {
+                    return result.candidates[0].content.parts[0].text.trim();
+                } else {
+                    let e = "A resposta da IA veio vazia ou em formato inesperado.";
+                    if (result.promptFeedback?.blockReason) {
+                        e = `Sua solicitação foi bloqueada. Motivo: ${result.promptFeedback.blockReason}`;
+                    }
+                    throw new Error(e);
+                }
+            } catch (error) {
+                console.error('Erro ao chamar a API Gemini:', error);
+                showNotification(`Erro ao gerar sugestão: ${error.message}`);
+                return null;
+            } finally {
+                button.classList.remove('loading');
+                button.disabled = false;
+            }
+        }
+
+        function showNotification(message, isSuccess = false) {
+            notificationBox.textContent = message;
+            notificationBox.style.backgroundColor = isSuccess ? '#10b981' : '#ef4444';
+            notificationBox.style.display = 'block';
+            setTimeout(() => {
+                notificationBox.style.display = 'none';
+            }, 5000);
+        }
+
+        // --- Lógica de Horários Dinâmicos ---
+        function addScheduleEntry() {
+            scheduleIndex++;
+            const entryDiv = document.createElement('div');
+            entryDiv.className = 'schedule-entry grid grid-cols-1 md:grid-cols-3 gap-4 items-end';
+            entryDiv.innerHTML = `
+                <div class="md:col-span-1">
+                    <label for="doc-name-${scheduleIndex}" class="form-label text-sm">Nome do Profissional</label>
+                    <input type="text" id="doc-name-${scheduleIndex}" name="doctor_schedule[${scheduleIndex}][name]" class="form-input" placeholder="Dr. João Silva" required>
+                </div>
+                <div class="md:col-span-2">
+                    <label for="doc-hours-${scheduleIndex}" class="form-label text-sm">Dias e Horários de Atendimento</label>
+                    <textarea id="doc-hours-${scheduleIndex}" name="doctor_schedule[${scheduleIndex}][hours]" class="form-textarea" rows="2" placeholder="Ex: Segunda e Quarta: 08:00 - 12:00" required></textarea>
+                </div>
+                <button type="button" class="remove-schedule-btn bg-red-100 text-red-700 text-sm font-semibold py-1 px-3 rounded-lg hover:bg-red-200 transition-colors md:col-start-3 justify-self-end">Remover</button>
+            `;
+            schedulesContainer.appendChild(entryDiv);
+            entryDiv.querySelector('.remove-schedule-btn').addEventListener('click', () => {
+                entryDiv.remove();
+            });
+        }
+        addScheduleBtn.addEventListener('click', addScheduleEntry);
+
+
+        // --- Event Listeners para os botões Gemini ---
+        document.querySelectorAll('.gemini-button').forEach(button => {
+            button.addEventListener('click', async (e) => {
+                const action = e.currentTarget.dataset.geminiAction;
+                let prompt = '';
+                let targetElementId = '';
+
+                switch (action) {
+                    case 'generate-name':
+                        prompt = `Sugira um nome criativo e profissional para um assistente virtual de uma clínica de saúde. O nome deve ser curto, amigável e de fácil pronúncia em português. Retorne apenas o nome sugerido, sem frases introdutórias.`;
+                        targetElementId = 'assistant-name';
+                        break;
+                    case 'generate-intro':
+                        const assistantName = document.getElementById('assistant-name').value || 'nossa assistente virtual';
+                        const tone = document.getElementById('tone-of-voice').value;
+                        prompt = `Crie uma mensagem de apresentação para um chatbot de clínica. O nome do assistente é "${assistantName}". O tom da mensagem deve ser "${tone}". A mensagem deve ser curta e acolhedora. Retorne apenas a mensagem, sem aspas ou frases introdutórias.`;
+                        targetElementId = 'intro-message';
+                        break;
+                    case 'generate-procedures-desc':
+                        const procedures = document.getElementById('common-procedures').value.trim();
+                        if (!procedures) { showNotification('Por favor, liste pelo menos um procedimento.'); return; }
+                        prompt = `Para cada um dos seguintes procedimentos de uma clínica, crie uma descrição curta (1-2 frases), simples e focada nos benefícios para um paciente leigo. Formate a resposta com o nome do procedimento em negrito (usando asteriscos, ex: *Clareamento Dental*) seguido pela descrição. Procedimentos:\n${procedures}`;
+                        targetElementId = 'procedures-description';
+                        break;
+                }
+
+                if (prompt && targetElementId) {
+                    const suggestion = await callGemini(prompt, e.currentTarget);
+                    if (suggestion) { document.getElementById(targetElementId).value = suggestion.replace(/^["*]+|["*]+$/g, ''); }
+                }
+            });
         });
         
-        if (stepIndex === 2) { // Horários
-            const scheduleEntries = schedulesContainer.querySelectorAll('.schedule-entry');
-            if (scheduleEntries.length === 0) {
-                isValid = false; 
+        form.addEventListener('input', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
+                if(e.target.value.trim() !== '') { e.target.classList.remove('invalid'); }
             }
-            scheduleEntries.forEach(entry => {
-                const inputs = entry.querySelectorAll('input, textarea');
-                inputs.forEach(input => {
-                    if (!input.value.trim()) {
-                        input.classList.add('invalid');
-                        isValid = false;
-                    } else {
-                        input.classList.remove('invalid');
+        });
+
+        // --- Lógica do Formulário Principal ---
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            let allValid = true;
+            for(let i = 0; i < formSteps.length; i++){
+                if(!validateStep(i)){
+                    allValid = false;
+                    currentStep = i;
+                    updateFormSteps();
+                    showNotification('Por favor, revise os campos destacados em vermelho.');
+                    break;
+                }
+            }
+            
+            if(allValid) {
+                const config = {};
+                const formData = new FormData(form);
+
+                for (const [key, value] of formData.entries()) {
+                    if (!key.startsWith('doctor_schedule')) {
+                        config[key] = value;
+                    }
+                }
+
+                config.horarios_profissionais = [];
+                const scheduleEntries = schedulesContainer.querySelectorAll('.schedule-entry');
+                scheduleEntries.forEach((entry) => {
+                    const nameInput = entry.querySelector(`input[name*="[name]"]`);
+                    const hoursInput = entry.querySelector(`textarea[name*="[hours]"]`);
+                    if (nameInput && hoursInput) {
+                        config.horarios_profissionais.push({ nome: nameInput.value, horarios: hoursInput.value });
                     }
                 });
-            });
-        }
+                
+                const jsonString = JSON.stringify(config, null, 2);
+                
+                // Lógica de envio com EmailJS
+                const templateParams = { dados_json: jsonString };
+                nextBtn.textContent = 'Enviando...';
+                nextBtn.disabled = true;
 
-        return isValid;
-    }
+                emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams, EMAILJS_PUBLIC_KEY)
+                    .then((response) => {
+                        // Oculta o formulário e mostra a página de agradecimento
+                        formContainer.style.display = 'none';
+                        thankYouPage.classList.remove('hidden');
 
+                        // Adiciona funcionalidade ao botão de download
+                        const downloadBtn = document.getElementById('download-backup-btn');
+                        downloadBtn.addEventListener('click', () => {
+                             const blob = new Blob([jsonString], { type: 'application/json' });
+                             const downloadLink = document.createElement('a');
+                             downloadLink.href = URL.createObjectURL(blob);
+                             downloadLink.download = 'configuracao_assistente.json';
+                             document.body.appendChild(downloadLink);
+                             downloadLink.click();
+                             document.body.removeChild(downloadLink);
+                        });
 
-    nextBtn.addEventListener('click', () => {
-        if (validateStep(currentStep)) {
-            if (currentStep < formSteps.length - 1) {
-                currentStep++;
-                updateFormSteps();
-            } else {
-                form.dispatchEvent(new Event('submit', { cancelable: true }));
-            }
-        } else {
-                showNotification('Por favor, preencha todos os campos destacados em vermelho.');
-        }
-    });
-
-    prevBtn.addEventListener('click', () => {
-        if (currentStep > 0) {
-            currentStep--;
-            updateFormSteps();
-        }
-    });
-
-    updateFormSteps();
-
-
-    // --- Funções da API Gemini ---
-    async function callGemini(prompt, button) {
-        if (!apiKey) {
-            showNotification("A chave da API do Gemini não foi configurada. A geração de sugestões está desativada.");
-            return null;
-        }
-
-        button.classList.add('loading');
-        button.disabled = true;
-        
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-        const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
-
-        try {
-            let response; let retries = 3; let delay = 1000;
-            for (let i = 0; i < retries; i++) {
-                response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                if (response.ok) break;
-                if (response.status === 429 || response.status >= 500) { await new Promise(resolve => setTimeout(resolve, delay)); delay *= 2; } else { break; }
-            }
-            
-            if (!response.ok) {
-                const errorBody = await response.json().catch(() => ({ error: { message: response.statusText } }));
-                const details = errorBody?.error?.message || `Erro desconhecido (${response.status})`;
-                throw new Error(`Erro na API: ${details}`);
-            }
-            
-            const result = await response.json();
-            if (result.candidates && result.candidates[0]?.content?.parts?.[0]?.text) {
-                return result.candidates[0].content.parts[0].text.trim();
-            } else {
-                let e = "A resposta da IA veio vazia ou em formato inesperado.";
-                if (result.promptFeedback?.blockReason) {
-                    e = `Sua solicitação foi bloqueada. Motivo: ${result.promptFeedback.blockReason}`;
-                }
-                throw new Error(e);
-            }
-        } catch (error) {
-            console.error('Erro ao chamar a API Gemini:', error);
-            showNotification(`Erro ao gerar sugestão: ${error.message}`);
-            return null;
-        } finally {
-            button.classList.remove('loading');
-            button.disabled = false;
-        }
-    }
-
-    function showNotification(message, isSuccess = false) {
-        notificationBox.textContent = message;
-        notificationBox.style.backgroundColor = isSuccess ? '#10b981' : '#ef4444';
-        notificationBox.style.display = 'block';
-        setTimeout(() => {
-            notificationBox.style.display = 'none';
-        }, 5000);
-    }
-
-    // --- Lógica de Horários Dinâmicos ---
-    function addScheduleEntry() {
-        scheduleIndex++;
-        const entryDiv = document.createElement('div');
-        entryDiv.className = 'schedule-entry grid grid-cols-1 md:grid-cols-3 gap-4 items-end';
-        entryDiv.innerHTML = `
-            <div class="md:col-span-1">
-                <label for="doc-name-${scheduleIndex}" class="form-label text-sm">Nome do Profissional</label>
-                <input type="text" id="doc-name-${scheduleIndex}" name="doctor_schedule[${scheduleIndex}][name]" class="form-input" placeholder="Dr. João Silva" required>
-            </div>
-            <div class="md:col-span-2">
-                <label for="doc-hours-${scheduleIndex}" class="form-label text-sm">Dias e Horários de Atendimento</label>
-                <textarea id="doc-hours-${scheduleIndex}" name="doctor_schedule[${scheduleIndex}][hours]" class="form-textarea" rows="2" placeholder="Ex: Segunda e Quarta: 08:00 - 12:00" required></textarea>
-            </div>
-            <button type="button" class="remove-schedule-btn bg-red-100 text-red-700 text-sm font-semibold py-1 px-3 rounded-lg hover:bg-red-200 transition-colors md:col-start-3 justify-self-end">Remover</button>
-        `;
-        schedulesContainer.appendChild(entryDiv);
-        entryDiv.querySelector('.remove-schedule-btn').addEventListener('click', () => {
-            entryDiv.remove();
-        });
-    }
-    addScheduleBtn.addEventListener('click', addScheduleEntry);
-
-
-    // --- Event Listeners para os botões Gemini ---
-    document.querySelectorAll('.gemini-button').forEach(button => {
-        button.addEventListener('click', async (e) => {
-            const action = e.currentTarget.dataset.geminiAction;
-            let prompt = '';
-            let targetElementId = '';
-
-            switch (action) {
-                case 'generate-name':
-                    prompt = `Sugira um nome criativo e profissional para um assistente virtual de uma clínica de saúde. O nome deve ser curto, amigável e de fácil pronúncia em português. Retorne apenas o nome sugerido, sem frases introdutórias.`;
-                    targetElementId = 'assistant-name';
-                    break;
-                case 'generate-intro':
-                    const assistantName = document.getElementById('assistant-name').value || 'nossa assistente virtual';
-                    const tone = document.getElementById('tone-of-voice').value;
-                    prompt = `Crie uma mensagem de apresentação para um chatbot de clínica. O nome do assistente é "${assistantName}". O tom da mensagem deve ser "${tone}". A mensagem deve ser curta e acolhedora. Retorne apenas a mensagem, sem aspas ou frases introdutórias.`;
-                    targetElementId = 'intro-message';
-                    break;
-                case 'generate-procedures-desc':
-                    const procedures = document.getElementById('common-procedures').value.trim();
-                    if (!procedures) { showNotification('Por favor, liste pelo menos um procedimento.'); return; }
-                    prompt = `Para cada um dos seguintes procedimentos de uma clínica, crie uma descrição curta (1-2 frases), simples e focada nos benefícios para um paciente leigo. Formate a resposta com o nome do procedimento em negrito (usando asteriscos, ex: *Clareamento Dental*) seguido pela descrição. Procedimentos:\n${procedures}`;
-                    targetElementId = 'procedures-description';
-                    break;
-            }
-
-            if (prompt && targetElementId) {
-                const suggestion = await callGemini(prompt, e.currentTarget);
-                if (suggestion) { document.getElementById(targetElementId).value = suggestion.replace(/^["*]+|["*]+$/g, ''); }
-            }
-        });
-    });
-    
-    form.addEventListener('input', (e) => {
-        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
-            if(e.target.value.trim() !== '') { e.target.classList.remove('invalid'); }
-        }
-    });
-
-    // --- Lógica do Formulário Principal ---
-    form.addEventListener('submit', function(event) {
-        event.preventDefault();
-        let allValid = true;
-        for(let i = 0; i < formSteps.length; i++){
-            if(!validateStep(i)){
-                allValid = false;
-                currentStep = i;
-                updateFormSteps();
-                showNotification('Por favor, preencha todos os campos destacados em vermelho.');
-                break;
-            }
-        }
-        
-        if(allValid) {
-            const config = {};
-            const formData = new FormData(form);
-
-            for (const [key, value] of formData.entries()) {
-                if (!key.startsWith('doctor_schedule')) {
-                    config[key] = value;
-                }
-            }
-
-            config.horarios_profissionais = [];
-            const scheduleEntries = schedulesContainer.querySelectorAll('.schedule-entry');
-            scheduleEntries.forEach((entry) => {
-                const nameInput = entry.querySelector(`input[name*="[name]"]`);
-                const hoursInput = entry.querySelector(`textarea[name*="[hours]"]`);
-                if (nameInput && hoursInput) {
-                    config.horarios_profissionais.push({ nome: nameInput.value, horarios: hoursInput.value });
-                }
-            });
-            
-            const jsonString = JSON.stringify(config, null, 2);
-            
-            // --- MODIFICADO: Lógica de envio com EmailJS ---
-            const templateParams = { dados_json: jsonString };
-            nextBtn.textContent = 'Enviando...';
-            nextBtn.disabled = true;
-
-            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams, EMAILJS_PUBLIC_KEY)
-                .then((response) => {
-                    // Oculta o formulário e mostra a página de agradecimento
-                    formContainer.style.display = 'none';
-                    thankYouPage.classList.remove('hidden');
-
-                    // Adiciona funcionalidade ao botão de download
-                    const downloadBtn = document.getElementById('download-backup-btn');
-                    downloadBtn.addEventListener('click', () => {
-                         const blob = new Blob([jsonString], { type: 'application/json' });
-                         const downloadLink = document.createElement('a');
-                         downloadLink.href = URL.createObjectURL(blob);
-                         downloadLink.download = 'configuracao_assistente.json';
-                         document.body.appendChild(downloadLink);
-                         downloadLink.click();
-                         document.body.removeChild(downloadLink);
+                    }, (error) => {
+                        showNotification(`Erro ao enviar e-mail: ${error.text}. Baixando arquivo como backup.`);
+                        console.error('EMAILJS ERROR:', error);
+                        // Fallback para download do arquivo se o e-mail falhar
+                        const blob = new Blob([jsonString], { type: 'application/json' });
+                        const downloadLink = document.createElement('a');
+                        downloadLink.href = URL.createObjectURL(blob);
+                        downloadLink.download = 'configuracao_assistente.json';
+                        document.body.appendChild(downloadLink);
+                        downloadLink.click();
+                        document.body.removeChild(downloadLink);
+                        nextBtn.textContent = 'Salvar e Enviar';
+                        nextBtn.disabled = false;
                     });
+            }
+        });
+    </script>
 
-                }, (error) => {
-                    showNotification(`Erro ao enviar e-mail: ${error.text}. Baixando arquivo como backup.`);
-                    console.error('EMAILJS ERROR:', error);
-                    // Fallback para download do arquivo se o e-mail falhar
-                    const blob = new Blob([jsonString], { type: 'application/json' });
-                    const downloadLink = document.createElement('a');
-                    downloadLink.href = URL.createObjectURL(blob);
-                    downloadLink.download = 'configuracao_assistente.json';
-                    document.body.appendChild(downloadLink);
-                    downloadLink.click();
-                    document.body.removeChild(downloadLink);
-                    nextBtn.textContent = 'Salvar e Enviar';
-                    nextBtn.disabled = false;
-                });
-        }
-    });
-</script>
 </body>
 </html>
